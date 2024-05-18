@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "954564730171",
+    "project_id": "dbte-debo-una",
+    "storage_bucket": "dbte-debo-una.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:954564730171:android:3e150e6f7d171a7c6f2b1e",
+        "android_client_info": {
+          "package_name": "com.example.tedebouna"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDTTw13SCthLMj8ony365jVXmTY9vqMeXg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
