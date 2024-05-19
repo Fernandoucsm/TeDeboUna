@@ -13,14 +13,12 @@
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:targetApi="31" >
         <activity
-            android:name=".CrearPublicacion"
+            android:name=".CrearPublicacionFragment"
             android:exported="false" />
         <activity
             android:name=".menu_inferior"
             android:exported="false" />
-        <activity
-            android:name=".contenedor"
-            android:exported="false" />
+        <activity android:name=".CommentActivity" />
         <activity
             android:name=".Registro"
             android:exported="false" />
