@@ -1,24 +1,38 @@
 package com.example.tedebouna;
 
+import com.example.tedebouna.Comment;
+import com.example.tedebouna.CommentAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
+import androidx.annotation.NonNull;
+import android.widget.LinearLayout;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.DocumentReference;
 import com.squareup.picasso.Picasso;
-
+import com.google.firebase.firestore.CollectionReference;
+import android.widget.Toast;
+import java.util.HashMap;
 import java.util.List;
+import android.app.AlertDialog;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import java.util.Map;
 
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder> {
 
     private List<Post> postList;
+    private FirebaseFirestore db;
 
     public PostAdapter(List<Post> postList) {
         this.postList = postList;
+        this.db = FirebaseFirestore.getInstance();
     }
 
     @NonNull
@@ -32,13 +46,102 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
     public void onBindViewHolder(@NonNull PostViewHolder holder, int position) {
         Post post = postList.get(position);
         holder.postContentTextView.setText(post.getContent());
-        holder.userEmailTextView.setText(post.getUserEmail()); // Mostrar el correo electrónico del usuario
+        holder.userEmailTextView.setText(post.getUserEmail());
+        holder.userNameTextView.setText(post.getUserName());
         if (post.getImageUrl() != null) {
             holder.postImageView.setVisibility(View.VISIBLE);
             Picasso.get().load(post.getImageUrl()).into(holder.postImageView);
         } else {
             holder.postImageView.setVisibility(View.GONE);
         }
+
+        db.collection("users").document(post.getUserId())
+                .get()
+                .addOnSuccessListener(documentSnapshot -> {
+                    String profileImageUrl = documentSnapshot.getString("profileImageUrl");
+                    Log.d("Profile Image URL", profileImageUrl);
+                    if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                        Picasso.get()
+                                .load(profileImageUrl)
+                                .placeholder(R.drawable.ayuda)
+                                .error(R.drawable.logo1)
+                                .into(holder.userProfileImageView);
+                    }
+                })
+                .addOnFailureListener(e -> Log.e("Profile Image Error", "Error loading profile image", e));
+
+        holder.commentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Make the comment section visible
+                holder.commentSection.setVisibility(View.VISIBLE);
+
+                // Obtén una referencia al documento post
+                DocumentReference postRef = db.collection("posts").document(post.getUserId());
+
+                // Crea una nueva colección en el documento post para los comentarios
+                CollectionReference commentsRef = postRef.collection("comments");
+
+                // Obtén los comentarios
+                commentsRef.get()
+                        .addOnSuccessListener(queryDocumentSnapshots -> {
+                            List<Comment> comments = queryDocumentSnapshots.toObjects(Comment.class);
+
+                            // Set the adapter for the RecyclerView
+                            holder.commentsRecyclerView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
+                            holder.commentsRecyclerView.setAdapter(new CommentAdapter(comments));
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.w("Firestore", "Error obteniendo comentarios", e);
+                        });
+            }
+        });
+
+        holder.postCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String comment = holder.newCommentEditText.getText().toString();
+                if (comment.isEmpty()) {
+                    // Muestra un mensaje Toast si el EditText está vacío
+                    Toast.makeText(holder.itemView.getContext(), "Por favor, escribe un comentario", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                Map<String, Object> commentData = new HashMap<>();
+                commentData.put("userId", FirebaseAuth.getInstance().getCurrentUser().getUid());
+                commentData.put("content", comment);
+
+                // Obtén una referencia al documento post
+                DocumentReference postRef = db.collection("posts").document(post.getUserId());
+
+                // Crea una nueva colección en el documento post para los comentarios
+                CollectionReference commentsRef = postRef.collection("comments");
+
+                // Agrega el nuevo comentario a la colección de comentarios
+                commentsRef.add(commentData)
+                        .addOnSuccessListener(documentReference -> {
+                            Log.d("Firestore", "Comentario agregado con ID: " + documentReference.getId());
+                            holder.newCommentEditText.setText(""); // Limpia el EditText después de publicar el comentario
+
+                            // Muestra un mensaje Toast cuando el comentario se agrega con éxito
+                            Toast.makeText(holder.itemView.getContext(), "Comentario publicado con éxito", Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnFailureListener(e -> {
+                            Log.w("Firestore", "Error agregando comentario", e);
+
+                            // Muestra un mensaje Toast cuando hay un error al agregar el comentario
+                            Toast.makeText(holder.itemView.getContext(), "Error al publicar el comentario", Toast.LENGTH_SHORT).show();
+                        });
+            }
+        });
+
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Cierra la sección de comentarios cuando se presiona fuera del post
+                holder.commentSection.setVisibility(View.GONE);
+            }
+        });
     }
 
     @Override
@@ -48,14 +151,28 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
     public static class PostViewHolder extends RecyclerView.ViewHolder {
         TextView postContentTextView;
-        TextView userEmailTextView; // Nuevo TextView para mostrar el correo electrónico del usuario
+        TextView userEmailTextView;
+        TextView userNameTextView;
         ImageView postImageView;
+        de.hdodenhof.circleimageview.CircleImageView userProfileImageView;
+        Button commentButton;
+        LinearLayout commentSection; // Asegúrate de que este campo esté definido
+        EditText newCommentEditText;
+        Button postCommentButton;
+        RecyclerView commentsRecyclerView; // Add a field for the RecyclerView
 
         public PostViewHolder(@NonNull View itemView) {
             super(itemView);
             postContentTextView = itemView.findViewById(R.id.postContentTextView);
-            userEmailTextView = itemView.findViewById(R.id.userEmailTextView); // Asignar el TextView del correo electrónico del usuario
+            userEmailTextView = itemView.findViewById(R.id.userEmailTextView);
+            userNameTextView = itemView.findViewById(R.id.userNameTextView);
             postImageView = itemView.findViewById(R.id.postImageView);
+            userProfileImageView = itemView.findViewById(R.id.userProfileImageView);
+            commentButton = itemView.findViewById(R.id.commentButton);
+            commentSection = itemView.findViewById(R.id.commentSection); // Encuentra la sección de comentarios en tu layout
+            newCommentEditText = itemView.findViewById(R.id.newCommentEditText);
+            postCommentButton = itemView.findViewById(R.id.postCommentButton);
+            commentsRecyclerView = itemView.findViewById(R.id.commentsRecyclerView); // Find the RecyclerView in your layout
         }
     }
 }

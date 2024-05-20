@@ -1,12 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="8dp"
-    android:background="@drawable/post_background">
+    android:padding="16dp"
+    android:background="@drawable/post_background"
+    android:layout_margin="8dp"
+    android:elevation="4dp">
 
-    <!-- Correo del usuario -->
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/userProfileImageView"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginEnd="8dp"
+        android:scaleType="centerCrop" />
+
+    <TextView
+        android:id="@+id/userNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:layout_marginBottom="8dp" />
+
     <TextView
         android:id="@+id/userEmailTextView"
         android:layout_width="wrap_content"
@@ -14,27 +32,70 @@
         android:textSize="14sp"
         android:textStyle="italic"
         android:textColor="@android:color/darker_gray"
-        android:layout_marginBottom="4dp"/>
+        android:layout_marginBottom="8dp" />
 
-    <!-- Contenido de la publicación -->
     <TextView
         android:id="@+id/postContentTextView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:layout_marginBottom="8dp" />
+        android:lineSpacingExtra="4dp"
+        android:layout_marginBottom="12dp" />
 
-    <!-- Imagen de la publicación (si es aplicable) -->
     <ImageView
         android:id="@+id/postImageView"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:visibility="gone"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="12dp" />
+
     <Button
         android:id="@+id/commentButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Comentar" />
+        android:layout_gravity="end"
+        android:background="?android:attr/selectableItemBackground"
+        android:elevation="2dp"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp"
+        android:text="Comentar"
+        android:textColor="@color/button_background" />
+
+    <!-- Sección de comentarios -->
+    <LinearLayout
+        android:id="@+id/commentSection"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone"
+        android:paddingTop="16dp">
+
+        <EditText
+            android:id="@+id/newCommentEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Escribe un comentario"
+            android:padding="8dp"
+            android:layout_marginBottom="8dp" />
+
+        <Button
+            android:id="@+id/postCommentButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Publicar"
+            android:layout_gravity="end"
+            android:background="@color/colorPrimary"
+            android:textColor="@android:color/white" />
+
+        <!-- Lista de comentarios -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/commentsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp" />
+
+
+    </LinearLayout>
 
 </LinearLayout>

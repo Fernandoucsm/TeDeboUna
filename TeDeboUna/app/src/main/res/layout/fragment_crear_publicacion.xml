@@ -2,17 +2,23 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
 
     <!-- Texto de la publicación -->
-    <EditText
-        android:id="@+id/postContentEditText"
+    <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="¿Qué duda tienes?"
-        android:inputType="textMultiLine"
-        android:minHeight="100dp"
-        android:padding="8dp" />
+        android:hint="¿Qué duda tienes?">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/postContentEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:minHeight="100dp" />
+
+    </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Botón para seleccionar imagen -->
     <Button
@@ -21,9 +27,10 @@
         android:layout_height="wrap_content"
         android:text="Agregar Imagen"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="8dp"
         android:drawableStart="@android:drawable/ic_menu_camera"
-        android:padding="8dp" />
+        android:padding="8dp"
+        android:background="@drawable/button_rounded"
+        android:textColor="@color/white" />
 
     <!-- Vista previa de la imagen seleccionada -->
     <ImageView
@@ -42,7 +49,9 @@
         android:text="Publicar"
         android:layout_marginTop="16dp"
         android:layout_gravity="center"
-        android:padding="12dp" />
+        android:padding="12dp"
+        android:background="@drawable/button_rounded"
+        android:textColor="@color/white" />
 
     <!-- Barra de progreso -->
     <ProgressBar

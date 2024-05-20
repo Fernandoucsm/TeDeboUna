@@ -2,4 +2,13 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="card_background">#FFFFFF</color>
+    <color name="text_color_primary">#000000</color>
+    <color name="text_color_secondary">#787878</color>
+    <color name="button_background">#3F51B5</color>
+    <color name="button_text">#FFFFFF</color>
+    <color name="primaryColorDark">#3700B3</color>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
 </resources>

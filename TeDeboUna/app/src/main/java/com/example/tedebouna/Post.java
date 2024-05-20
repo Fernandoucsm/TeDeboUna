@@ -1,23 +1,33 @@
 package com.example.tedebouna;
 
 public class Post {
+    private String userProfileImageUrl; // New field for the user's profile image URL
+
     private String content;
     private String imageUrl;
     private String userId;
-    private String userEmail; // Nuevo campo para el correo electrónico del usuario
+    private String userEmail;
+    private String userName; // Nuevo campo para el nombre del usuario
     private long timestamp;
 
     // Constructor vacío requerido para Firestore
     public Post() {}
 
-    public Post(String content, String imageUrl, String userId, String userEmail, long timestamp) {
+    public Post(String content, String imageUrl, String userId, String userEmail, String userName, long timestamp) {
         this.content = content;
         this.imageUrl = imageUrl;
         this.userId = userId;
-        this.userEmail = userEmail; // Asignar el correo electrónico del usuario
+        this.userEmail = userEmail;
+        this.userName = userName; // Asignar el nombre del usuario
         this.timestamp = timestamp;
     }
+    public String getUserProfileImageUrl() {
+        return userProfileImageUrl;
+    }
 
+    public void setUserProfileImageUrl(String userProfileImageUrl) {
+        this.userProfileImageUrl = userProfileImageUrl;
+    }
     // Getters y setters
     public String getContent() {
         return content;
@@ -49,6 +59,14 @@ public class Post {
 
     public void setUserEmail(String userEmail) {
         this.userEmail = userEmail;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public long getTimestamp() {

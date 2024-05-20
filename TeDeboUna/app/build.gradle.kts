@@ -1,6 +1,6 @@
 plugins {
-    alias(libs.plugins.androidApplication)
-    id("com.google.gms.google-services")
+    id("com.android.application") version "8.3.0"
+    id("com.google.gms.google-services") version "4.4.1"
 }
 
 
@@ -54,6 +54,6 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.picasso)
-
+    implementation("de.hdodenhof:circleimageview:3.1.0")
 }
 

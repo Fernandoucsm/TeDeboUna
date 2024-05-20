@@ -1,0 +1,55 @@
+package com.example.tedebouna;
+
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.TextView;
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+import com.squareup.picasso.Picasso;
+import java.util.List;
+
+public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
+
+    private List<Comment> commentList;
+
+    public CommentAdapter(List<Comment> commentList) {
+        this.commentList = commentList;
+    }
+
+    @NonNull
+    @Override
+    public CommentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_comment, parent, false);
+        return new CommentViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull CommentViewHolder holder, int position) {
+        Comment comment = commentList.get(position);
+        holder.commentTextView.setText(comment.getContent());
+        holder.commentUserNameTextView.setText(comment.getUserName());
+        holder.commentUserEmailTextView.setText(comment.getUserEmail());
+        Picasso.get().load(comment.getUserProfileImageUrl()).into(holder.commentUserProfileImageView);
+    }
+
+    @Override
+    public int getItemCount() {
+        return commentList.size();
+    }
+
+    public static class CommentViewHolder extends RecyclerView.ViewHolder {
+        TextView commentTextView;
+        TextView commentUserNameTextView;
+        TextView commentUserEmailTextView;
+        de.hdodenhof.circleimageview.CircleImageView commentUserProfileImageView;
+
+        public CommentViewHolder(@NonNull View itemView) {
+            super(itemView);
+            commentTextView = itemView.findViewById(R.id.commentTextView);
+            commentUserNameTextView = itemView.findViewById(R.id.commentUserNameTextView);
+            commentUserEmailTextView = itemView.findViewById(R.id.commentUserEmailTextView);
+            commentUserProfileImageView = itemView.findViewById(R.id.commentUserProfileImageView);
+        }
+    }
+}

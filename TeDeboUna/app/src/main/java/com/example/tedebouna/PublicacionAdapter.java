@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import java.util.List;
 
@@ -34,15 +35,34 @@ public class PublicacionAdapter extends RecyclerView.Adapter<PublicacionAdapter.
     }
 
     static class PublicacionViewHolder extends RecyclerView.ViewHolder {
-        // Aquí se deben declarar las vistas que se van a usar en el item_publicacion
+        // Declarar los botones
+        Button likeButton;
+        Button shareButton;
 
         public PublicacionViewHolder(@NonNull View itemView) {
             super(itemView);
-            // Aquí se deben inicializar las vistas que se van a usar en el item_publicacion
+
+            // Inicializar los botones
+            //  likeButton = itemView.findViewById(R.id.likeButton);
+            //  shareButton = itemView.findViewById(R.id.shareButton);
         }
 
         public void bind(Publicacion publicacion) {
-            // Aquí se deben setear los datos de la publicacion en las vistas
+            // Configurar el listener de clic para el botón de "Dar like"
+            likeButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Aquí puedes implementar la lógica para "dar like" a la publicación
+                }
+            });
+
+            // Configurar el listener de clic para el botón de "Compartir"
+            shareButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Aquí puedes implementar la lógica para compartir la publicación
+                }
+            });
         }
     }
 }
