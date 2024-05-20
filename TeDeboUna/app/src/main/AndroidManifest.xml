@@ -15,6 +15,7 @@
         <activity
             android:name=".CrearPublicacionFragment"
             android:exported="false" />
+        <activity android:name=".Perfil" />
         <activity
             android:name=".menu_inferior"
             android:exported="false" />

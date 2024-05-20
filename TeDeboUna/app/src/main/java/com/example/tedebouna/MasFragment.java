@@ -3,6 +3,7 @@ package com.example.tedebouna;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,6 +36,18 @@ public class MasFragment extends Fragment {
                         .remove("email")
                         .remove("password")
                         .apply();
+            }
+        });
+
+        Button btnProfile = view.findViewById(R.id.btn_profile);
+        btnProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Reemplaza el fragmento actual con Perfil cuando se haga clic en el botón
+                FragmentTransaction transaction = getParentFragmentManager().beginTransaction();
+                transaction.replace(R.id.frameLayout, new Perfil());
+                transaction.addToBackStack(null);
+                transaction.commit();
             }
         });
 
