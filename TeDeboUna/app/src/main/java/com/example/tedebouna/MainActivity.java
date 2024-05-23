@@ -12,7 +12,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.inputmethod.EditorInfo;
 import android.widget.TextView;
-
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import android.content.DialogInterface;
+import android.app.AlertDialog;
+import androidx.annotation.NonNull;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -80,7 +84,47 @@ public class MainActivity extends AppCompatActivity {
         btnOlvide.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Implementar lógica para recuperar contraseña
+                // Crear un AlertDialog.Builder
+                AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+
+                // Configurar el título y el mensaje del AlertDialog
+                builder.setTitle("Restablecer contraseña");
+                builder.setMessage("Por favor, introduce tu correo electrónico para enviar el enlace de restablecimiento de contraseña.");
+
+                // Configurar un EditText en el AlertDialog para que el usuario pueda introducir su correo electrónico
+                final EditText input = new EditText(MainActivity.this);
+                builder.setView(input);
+
+                // Configurar los botones del AlertDialog
+                builder.setPositiveButton("Enviar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String email = input.getText().toString().trim();
+                        if (!email.isEmpty()) {
+                            // Enviar el correo electrónico de restablecimiento de contraseña
+                            mAuth.sendPasswordResetEmail(email)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            Toast.makeText(MainActivity.this, "Correo electrónico de restablecimiento de contraseña enviado.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(MainActivity.this, "Error al enviar el correo electrónico de restablecimiento de contraseña.", Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        } else {
+                            Toast.makeText(MainActivity.this, "Por favor, introduce tu correo electrónico.", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                builder.setNegativeButton("Cancelar", null);
+
+                // Crear y mostrar el AlertDialog
+                AlertDialog dialog = builder.create();
+                dialog.show();
             }
         });
     }
