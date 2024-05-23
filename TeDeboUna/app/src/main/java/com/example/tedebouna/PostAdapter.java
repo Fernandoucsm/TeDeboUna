@@ -58,6 +58,9 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
             holder.postImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    // Deshabilitar el clic en la imagen
+                    holder.postImageView.setClickable(false);
+
                     // Crear un AlertDialog.Builder
                     AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
 
@@ -83,6 +86,14 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
 
                     // Ajustar el tamaño del AlertDialog para que coincida con el tamaño de la imagen
                     dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                    // Cuando se cierra el diálogo, habilitar de nuevo el clic en la imagen
+                    dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+                        @Override
+                        public void onDismiss(DialogInterface dialog) {
+                            holder.postImageView.setClickable(true);
+                        }
+                    });
                 }
             });
         } else {
