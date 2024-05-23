@@ -1,7 +1,9 @@
 package com.example.tedebouna;
 
-import com.example.tedebouna.Comment;
-import com.example.tedebouna.CommentAdapter;
+import android.view.Gravity;
+import android.view.WindowManager;
+import com.github.chrisbanes.photoview.PhotoView;
+import android.content.DialogInterface;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +53,38 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
         if (post.getImageUrl() != null) {
             holder.postImageView.setVisibility(View.VISIBLE);
             Picasso.get().load(post.getImageUrl()).into(holder.postImageView);
+
+            // Aquí es donde agregas el OnClickListener para postImageView
+            holder.postImageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Crear un AlertDialog.Builder
+                    AlertDialog.Builder builder = new AlertDialog.Builder(holder.itemView.getContext());
+
+                    // Crear un PhotoView para mostrar la imagen en tamaño completo con capacidades de zoom y paneo
+                    PhotoView photoView = new PhotoView(holder.itemView.getContext());
+                    Picasso.get().load(post.getImageUrl()).into(photoView);
+
+                    // Permitir que la imagen se ajuste dentro del PhotoView manteniendo su relación de aspecto
+                    photoView.setAdjustViewBounds(true);
+
+                    // Configurar el AlertDialog.Builder
+                    builder.setView(photoView);
+                    builder.setNegativeButton("Cerrar", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+
+                    // Crear y mostrar el AlertDialog
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
+                    // Ajustar el tamaño del AlertDialog para que coincida con el tamaño de la imagen
+                    dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                }
+            });
         } else {
             holder.postImageView.setVisibility(View.GONE);
         }

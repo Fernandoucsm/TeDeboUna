@@ -19,12 +19,17 @@ import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 import androidx.fragment.app.FragmentTransaction;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Perfil extends Fragment {
 
     private static final int PICK_IMAGE = 1;
@@ -47,6 +52,23 @@ public class Perfil extends Fragment {
 
             nameTextView.setText(name);
             emailTextView.setText(email);
+
+            // Crear el documento del usuario si no existe
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            DocumentReference userDocRef = db.collection("users").document(user.getUid());
+            userDocRef.get().addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (!document.exists()) {
+                        // El documento no existe, así que lo creamos
+                        Map<String, Object> userData = new HashMap<>();
+                        userData.put("email", email);
+                        userDocRef.set(userData);
+                    }
+                } else {
+                    Log.e("User Document Error", "Error checking document existence", task.getException());
+                }
+            });
         }
 
         profileImageView = view.findViewById(R.id.profileImageView);
@@ -73,7 +95,6 @@ public class Perfil extends Fragment {
                     .into(profileImageView);
         }
 
-
         Button editSkillsButton = view.findViewById(R.id.editSkillsButton);
         editSkillsButton.setOnClickListener(v -> navigateToEditSkills());
         TextView skillsTextView = view.findViewById(R.id.skillsTextView);
@@ -87,13 +108,17 @@ public class Perfil extends Fragment {
                 .get()
                 .addOnSuccessListener(documentSnapshot -> {
                     profileImageUrl = documentSnapshot.getString("profileImageUrl");
-                    Log.d("Profile Image URL", profileImageUrl); // imprime la URL en el log
                     if (profileImageUrl != null && !profileImageUrl.isEmpty()) {
+                        Log.d("Profile Image URL", profileImageUrl); // imprime la URL en el log
                         Picasso.get()
                                 .load(profileImageUrl)
                                 .placeholder(R.drawable.ayuda)
                                 .error(R.drawable.logo1)
                                 .into(profileImageView);
+                    } else {
+                        Log.d("Profile Image URL", "URL is null or empty");
+                        // Establecemos una imagen por defecto si profileImageUrl es null o está vacío
+                        profileImageView.setImageResource(R.drawable.default_image);
                     }
                 })
                 .addOnFailureListener(e -> Log.e("Profile Image Error", "Error loading profile image", e));

@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.tedebouna"
-        minSdk = 23
+        minSdk = 24
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -55,5 +55,6 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.picasso)
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation("com.github.Baseflow:PhotoView:2.3.0")
 }
 
