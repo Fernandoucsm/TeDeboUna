@@ -1,72 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:padding="16dp"
     tools:context=".MasFragment">
 
+
     <TextView
-        android:layout_width="wrap_content"
+        android:id="@+id/titleTextView"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Más Opciones"
-        android:layout_gravity="center"
-        style="@style/TitleTextStyle"/>
+        android:layout_marginTop="16dp"
+        android:gravity="center"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-    <Button
-        android:id="@+id/btn_profile"
-        android:layout_width="match_parent"
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView1"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/perfil"
-        android:text="Perfil"
-        style="@style/ButtonStyle"/>
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleTextView"
+        app:layout_constraintWidth_percent="0.8" >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="8dp"/>
+        <Button
+            android:id="@+id/btn_profile"
+            style="@style/FacebookButtonStyle"
+            android:drawableTop="@drawable/perfil"
+            android:text="Perfil" />
 
-    <Button
-        android:id="@+id/btn_settings"
-        android:layout_width="match_parent"
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView2"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/config"
-        android:text="Configuraciones"
-        style="@style/ButtonStyle"/>
+        android:layout_marginTop="8dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView1"
+        app:layout_constraintWidth_percent="0.8" >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="8dp"/>
+        <Button
+            android:id="@+id/btn_settings"
+            style="@style/FacebookButtonStyle"
+            android:drawableTop="@drawable/config"
+            android:text="Configuraciones" />
 
-    <Button
-        android:id="@+id/btn_help"
-        android:layout_width="match_parent"
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView3"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/ayuda_sup"
-        android:text="Ayuda"
-        style="@style/ButtonStyle"/>
+        android:layout_marginTop="8dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView2"
+        app:layout_constraintWidth_percent="0.8" >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="8dp"/>
+        <Button
+            android:id="@+id/btn_help"
+            style="@style/FacebookButtonStyle"
+            android:drawableTop="@drawable/ayuda_sup"
+            android:text="Ayuda" />
 
-    <Button
-        android:id="@+id/btn_about"
-        android:layout_width="match_parent"
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView4"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/acerca"
-        android:text="Acerca de"
-        style="@style/ButtonStyle"/>
+        android:layout_marginTop="8dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView3"
+        app:layout_constraintWidth_percent="0.8" >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="8dp"/>
+        <Button
+            android:id="@+id/btn_about"
+            style="@style/FacebookButtonStyle"
+            android:drawableTop="@drawable/acerca"
+            android:text="Acerca de" />
 
-    <Button
-        android:id="@+id/btn_logout"
-        android:layout_width="match_parent"
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView5"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:drawableLeft="@drawable/logout"
-        android:text="Cerrar sesión"
-        style="@style/ButtonStyle"/>
-</LinearLayout>
+        android:layout_marginTop="8dp"
+        app:cardCornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView4"
+        app:layout_constraintWidth_percent="0.8" >
+
+        <Button
+            android:id="@+id/btn_logout"
+            style="@style/FacebookButtonStyle"
+            android:drawableTop="@drawable/logout"
+            android:text="Cerrar sesión" />
+
+    </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="265dp"
+        android:layout_height="125dp"
+        android:layout_marginStart="70dp"
+        android:layout_marginTop="36dp"
+        android:layout_marginEnd="70dp"
+        android:layout_marginBottom="43dp"
+        android:src="@drawable/logo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cardView5" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

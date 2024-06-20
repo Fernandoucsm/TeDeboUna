@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="Formulario de Ayuda"
+            android:textColor="@color/primary_color"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:text="Por favor, complete los siguientes campos para enviarnos su solicitud de ayuda. Nos pondremos en contacto con usted lo antes posible."
+            android:textColor="@color/secondary_text_color" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:boxBackgroundColor="@color/input_field_background_color"
+            app:boxStrokeColor="@color/input_field_border_color"
+            app:endIconMode="clear_text"
+            app:hintTextColor="@color/input_field_hint_color"
+            app:startIconDrawable="@drawable/ic_person">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nombre"
+                android:textColor="@color/primary_text_color" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundColor="@color/input_field_background_color"
+            app:boxStrokeColor="@color/input_field_border_color"
+            app:endIconMode="clear_text"
+            app:hintTextColor="@color/input_field_hint_color"
+            app:startIconDrawable="@drawable/ic_email">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Correo Electrónico"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/primary_text_color" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:boxBackgroundColor="@color/input_field_background_color"
+            app:boxStrokeColor="@color/input_field_border_color"
+            app:endIconMode="clear_text"
+            app:hintTextColor="@color/input_field_hint_color"
+            app:startIconDrawable="@drawable/ic_message">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/editTextDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="top"
+                android:hint="Descripción del Problema"
+                android:inputType="textMultiLine"
+                android:lines="5"
+                android:minLines="3"
+                android:textColor="@color/primary_text_color" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/buttonSubmit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="@color/button_color"
+            android:text="Enviar"
+            android:textColor="@color/button_text_color" />
+
+    </LinearLayout>
+</ScrollView>

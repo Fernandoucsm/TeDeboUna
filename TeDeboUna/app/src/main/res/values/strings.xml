@@ -2,4 +2,7 @@
     <string name="app_name">TeDeboUna</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="profile_icon">Icono de perfil</string>
+    <string name="app_logo">App Logo</string>
+    <string name="version_text">Version 1.0.0</string>
+    <string name="about_text">Creada por estudiantes de la Universidad Católica de Santa María, Fernando Cárdenas, Luis Quispe, Piero Pérez y Erick Velarde, "Te Debo Una" es una aplicación diseñada para fomentar la colaboración y el apoyo mutuo entre los miembros de nuestra comunidad universitaria.\n\nYa sea que necesites ayuda con apuntes de clase, busques compañeros de estudio, o simplemente quieras estar al tanto de los eventos y actividades en el campus, "Te Debo Una" es tu herramienta ideal.</string>
 </resources>

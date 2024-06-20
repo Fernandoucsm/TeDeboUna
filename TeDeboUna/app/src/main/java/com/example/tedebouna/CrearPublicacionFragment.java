@@ -24,6 +24,7 @@ import com.google.firebase.storage.*;
 import java.util.*;
 import com.google.android.gms.tasks.*;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.auth.FirebaseUser;
 
 
 public class CrearPublicacionFragment extends Fragment {
@@ -60,15 +61,13 @@ public class CrearPublicacionFragment extends Fragment {
             }
         });
 
-        publishButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                publishPost();
-            }
+        publishButton.setOnClickListener(v -> {
+            publishPost();
         });
 
         return view;
     }
+
 
     private void openImageChooser() {
         Intent intent = new Intent();
@@ -88,7 +87,7 @@ public class CrearPublicacionFragment extends Fragment {
     }
 
     private void publishPost() {
-        final String postContent = postContentEditText.getText().toString().trim();
+        String postContent = postContentEditText.getText().toString().trim();
 
         if (postContent.isEmpty()) {
             Toast.makeText(getActivity(), "Por favor, ingresa algo para publicar", Toast.LENGTH_SHORT).show();
@@ -97,63 +96,56 @@ public class CrearPublicacionFragment extends Fragment {
 
         progressBar.setVisibility(View.VISIBLE);
 
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser == null) {
+            // El usuario no ha iniciado sesión, maneja este caso (por ejemplo, redirige al login)
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(getActivity(), "Debes iniciar sesión para publicar", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Obtener el nombre de usuario de Firebase Authentication
+        String userName = currentUser.getDisplayName(); // Asegúrate de haber configurado el nombre de usuario en Firebase Auth
+
         if (imageUri != null) {
-            final StorageReference storageRef = storage.getReference().child("images/" + System.currentTimeMillis() + ".jpg");
+            StorageReference storageRef = storage.getReference().child("images/" + System.currentTimeMillis() + ".jpg");
             storageRef.putFile(imageUri)
-                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            storageRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                                @Override
-                                public void onSuccess(Uri uri) {
-                                    savePostToFirestore(postContent, uri.toString());
-                                }
-                            });
-                        }
+                    .addOnSuccessListener(taskSnapshot -> {
+                        storageRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                            savePostToFirestore(postContent, uri.toString(), userName); // Pasa el nombre de usuario
+                        });
                     })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            progressBar.setVisibility(View.GONE);
-                            Toast.makeText(getActivity(), "Error al subir la imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+                    .addOnFailureListener(e -> {
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(getActivity(), "Error al subir la imagen: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     });
         } else {
-            savePostToFirestore(postContent, null);
+            savePostToFirestore(postContent, null, userName); // Pasa el nombre de usuario
         }
     }
 
-    private void savePostToFirestore(String postContent, String imageUrl) {
-        // Obtener el correo electrónico del usuario actual
-        String userEmail = mAuth.getCurrentUser().getEmail();
-
-        // Crear un objeto Map para almacenar los datos de la publicación
+    private void savePostToFirestore(String postContent, String imageUrl, String userName) { // Recibe el nombre de usuario
         Map<String, Object> post = new HashMap<>();
         post.put("content", postContent);
         post.put("imageUrl", imageUrl);
         post.put("userId", mAuth.getCurrentUser().getUid());
-        post.put("userEmail", userEmail); // Agregar el correo electrónico del usuario
+        post.put("userEmail", mAuth.getCurrentUser().getEmail());
+        post.put("userName", userName); // Almacena el nombre de usuario
         post.put("timestamp", System.currentTimeMillis());
 
-        // Guardar la publicación en Firestore
         db.collection("posts")
                 .add(post)
-                .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentReference> task) {
-                        progressBar.setVisibility(View.GONE);
-                        if (task.isSuccessful()) {
-                            // Publicación exitosa
-                            Toast.makeText(getActivity(), "Publicación exitosa", Toast.LENGTH_SHORT).show();
-                            // Limpiar los campos después de publicar
-                            postContentEditText.setText("");
-                            selectedMediaImageView.setImageURI(null);
-                            selectedMediaImageView.setVisibility(View.GONE);
-                            imageUri = null;
-                        } else {
-                            // Error al publicar la publicación
-                            Toast.makeText(getActivity(), "Error al publicar: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
+                .addOnCompleteListener(task -> {
+                    progressBar.setVisibility(View.GONE);
+                    if (task.isSuccessful()) {
+                        Toast.makeText(getActivity(), "Publicación exitosa", Toast.LENGTH_SHORT).show();
+                        postContentEditText.setText("");
+                        selectedMediaImageView.setImageURI(null);
+                        selectedMediaImageView.setVisibility(View.GONE);
+                        imageUri = null;
+                    } else {
+                        Toast.makeText(getActivity(), "Error al publicar: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }

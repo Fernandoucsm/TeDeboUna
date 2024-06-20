@@ -17,12 +17,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.Map;
+import java.util.HashMap;
+
 
 public class Registro extends AppCompatActivity {
 
     private EditText editTextNombre, editTextCorreo, editTextCreaContra, editTextConfirContra;
     private Button btnRegistrar;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +51,9 @@ public class Registro extends AppCompatActivity {
                 registrarUsuario();
             }
         });
+
+        // Inicializa Firestore
+        db = FirebaseFirestore.getInstance();
     }
 
     private void registrarUsuario() {
@@ -110,10 +118,27 @@ public class Registro extends AppCompatActivity {
                                                                 }
                                                             });
 
-                                                    String userEmail = user.getEmail();
-                                                    Toast.makeText(Registro.this, "Registro exitoso. Correo electrónico: " + userEmail, Toast.LENGTH_SHORT).show();
-                                                    startActivity(new Intent(Registro.this, MainActivity.class));
-                                                    finish();
+                                                    // Guarda la información del usuario en Firestore
+                                                    String userId = user.getUid();
+                                                    Map<String, Object> userMap = new HashMap<>();
+                                                    userMap.put("nombre", nombre);
+                                                    userMap.put("correo", correo);
+
+                                                    db.collection("users").document(userId)
+                                                            .set(userMap)
+                                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                                @Override
+                                                                public void onComplete(@NonNull Task<Void> task) {
+                                                                    if (task.isSuccessful()) {
+                                                                        Toast.makeText(Registro.this, "Usuario registrado y datos guardados en Firestore.", Toast.LENGTH_SHORT).show();
+                                                                        startActivity(new Intent(Registro.this, MainActivity.class));
+                                                                        finish();
+                                                                    } else {
+                                                                        Toast.makeText(Registro.this, "Error al guardar datos en Firestore: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                                                    }
+                                                                }
+                                                            });
+
                                                 } else {
                                                     // Si el registro falla, mostrar un mensaje al usuario.
                                                     Toast.makeText(Registro.this, "Error al registrar el usuario: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();

@@ -52,7 +52,6 @@
             android:textColor="@color/colorPrimary"
             android:layout_marginBottom="16dp" />
 
-        <!-- Título para la sección de habilidades -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,5 +79,4 @@
             android:backgroundTint="@color/colorPrimary" />
 
     </LinearLayout>
-
 </ScrollView>

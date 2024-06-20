@@ -11,16 +11,18 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.content.Intent;
 import com.google.firebase.auth.FirebaseAuth;
-import static android.content.Context.MODE_PRIVATE;
-public class MasFragment extends Fragment {
 
+import static android.content.Context.MODE_PRIVATE;
+
+public class MasFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        /// Inflar el diseño del fragmento
         View view = inflater.inflate(R.layout.fragment_mas, container, false);
 
+        // Botón de cierre de sesión
         Button btnLogout = view.findViewById(R.id.btn_logout);
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -39,6 +41,7 @@ public class MasFragment extends Fragment {
             }
         });
 
+        // Botón de perfil
         Button btnProfile = view.findViewById(R.id.btn_profile);
         btnProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -51,7 +54,36 @@ public class MasFragment extends Fragment {
             }
         });
 
+        // Botón de configuraciones
+        Button btnSettings = view.findViewById(R.id.btn_settings);
+        btnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        // Botón de ayuda
+        Button btnHelp = view.findViewById(R.id.btn_help);
+        btnHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), Ayuda.class);
+                startActivity(intent);
+            }
+        });
+
+        // Botón de "Acerca de" (Corrected)
+        Button btnAbout = view.findViewById(R.id.btn_about);
+        btnAbout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), AcercaDe.class);
+                startActivity(intent);
+            }
+        });
 
         return view;
+
     }
 }
